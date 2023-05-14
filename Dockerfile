@@ -41,7 +41,7 @@ COPY ./package.json /app/
 # lazy install Chromium to avoid cache miss, only install production dependencies to minimize the image size
 RUN \
     set -ex && \
-    export PUPPETEER_SKIP_DOWNLOAD=true && \
+    export PUPPETEER_SKIP_DOWNLOAD=false && \
     npm pkg delete scripts.prepare && \
     corepack enable pnpm && \
     pnpm install --prod --frozen-lockfile && \
