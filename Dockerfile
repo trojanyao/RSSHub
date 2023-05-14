@@ -1,3 +1,23 @@
+FROM ubuntu
+
+RUN \
+    set -ex && \
+    apt-get update && \
+    apt install -yq --no-install-recommends \
+        apt-file \
+    && \
+    apt-file update && \
+    ldd $(find /app/node_modules/.cache/puppeteer/ -name chrome -type f) | grep -Po "\S+(?= => not found)" | \
+    sed 's/\./\\./g' | awk '{print $1"$"}' | apt-file search -xlf - | grep ^lib | \
+    xargs -d '\n' -- \
+        apt-get install -yq --no-install-recommends \
+    && \
+    apt purge -yq --auto-remove \
+        apt-file \
+    rm -rf /tmp/.chromium_path /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------------------------------------------------
+
 FROM node:18-bullseye as dep-builder
 # Here we use the non-slim image to provide build-time deps (compilers and python), thus no need to install later.
 # This effectively speeds up qemu-based cross-build.
