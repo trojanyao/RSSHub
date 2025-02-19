@@ -29,7 +29,7 @@ services:
           - /var/run/docker.sock:/var/run/docker.sock
         environment:
           - WATCHTOWER_CLEANUP=true  # 自动删除旧镜像
-          - WATCHTOWER_POLL_INTERVAL=300  # 每 5 分钟检查一次更新
+          - WATCHTOWER_POLL_INTERVAL=60  # 每 5 分钟检查一次更新
           - WATCHTOWER_INCLUDE_STOPPED=true  # 也更新已停止的容器
       
     browserless: # marked
