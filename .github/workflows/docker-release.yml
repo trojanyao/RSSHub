@@ -93,38 +93,38 @@ jobs:
           COSIGN_EXPERIMENTAL: 'true'
         run: echo "${{ steps.meta-ordinary.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push.outputs.digest }}
 
-      - name: Extract Docker metadata (Chromium-bundled version)
-        id: meta-chromium-bundled
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ secrets.DOCKER_USERNAME }}/rsshub
-            ghcr.io/${{ github.repository }}
-          tags: |
-            type=raw,value=chromium-bundled,enable=true
-            type=raw,value=chromium-bundled-{{date 'YYYY-MM-DD'}},enable=true
-            type=sha,format=long,prefix=chromium-bundled-,enable=true
-          flavor: latest=false
+      # - name: Extract Docker metadata (Chromium-bundled version)
+      #   id: meta-chromium-bundled
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: |
+      #       ${{ secrets.DOCKER_USERNAME }}/rsshub
+      #       ghcr.io/${{ github.repository }}
+      #     tags: |
+      #       type=raw,value=chromium-bundled,enable=true
+      #       type=raw,value=chromium-bundled-{{date 'YYYY-MM-DD'}},enable=true
+      #       type=sha,format=long,prefix=chromium-bundled-,enable=true
+      #     flavor: latest=false
 
-      - name: Build and push Docker image (Chromium-bundled version)
-        id: build-and-push-chromium
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          build-args: PUPPETEER_SKIP_DOWNLOAD=0
-          push: true
-          tags: ${{ steps.meta-chromium-bundled.outputs.tags }}
-          labels: ${{ steps.meta-chromium-bundled.outputs.labels }}
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
-          cache-from: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/rsshub:chromium-bundled
-          cache-to: type=inline,ref=${{ secrets.DOCKER_USERNAME }}/rsshub:chromium-bundled  # inline cache is enough
+      # - name: Build and push Docker image (Chromium-bundled version)
+      #   id: build-and-push-chromium
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     build-args: PUPPETEER_SKIP_DOWNLOAD=0
+      #     push: true
+      #     tags: ${{ steps.meta-chromium-bundled.outputs.tags }}
+      #     labels: ${{ steps.meta-chromium-bundled.outputs.labels }}
+      #     platforms: linux/amd64,linux/arm/v7,linux/arm64
+      #     cache-from: |
+      #       type=registry,ref=${{ secrets.DOCKER_USERNAME }}/rsshub:chromium-bundled
+      #     cache-to: type=inline,ref=${{ secrets.DOCKER_USERNAME }}/rsshub:chromium-bundled  # inline cache is enough
 
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        env:
-          COSIGN_EXPERIMENTAL: 'true'
-        run: echo "${{ steps.meta-chromium-bundled.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push-chromium.outputs.digest }}
+      # - name: Sign the published Docker image
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   env:
+      #     COSIGN_EXPERIMENTAL: 'true'
+      #   run: echo "${{ steps.meta-chromium-bundled.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push-chromium.outputs.digest }}
 
   description:
     runs-on: ubuntu-latest
