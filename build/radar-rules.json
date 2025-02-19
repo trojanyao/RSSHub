@@ -4735,6 +4735,16 @@
         ],
         "target": "/apple/podcast/:id/:region?"
       }
+    ],
+    "music": [
+      {
+        "title": "Apple Music",
+        "docs": "https://docs.rsshub.app/routes/multimedia",
+        "source": [
+          "/cn/artist/:name/:id"
+        ],
+        "target": "/apple-music/:name/:id"
+      }
     ]
   },
   "appleinsider.com": {

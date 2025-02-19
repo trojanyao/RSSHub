@@ -8799,6 +8799,40 @@
     "url": "apps.apple.com",
     "lang": "en"
   },
+  "apple-music": {
+    "routes": {
+      "/:name/:id": {
+        "path": "/:name/:id",
+        "name": "Apple Music",
+        "url": "music.apple.com",
+        "maintainers": [
+          "trojanyao"
+        ],
+        "example": "/apple-music/taylor-swift/159260351",
+        "parameters": {
+          "name": "音乐人名字（可在 AM 音乐人页面 URL 中找到）",
+          "id": "音乐人 ID（可在 AM 音乐人页面 URL 中找到）"
+        },
+        "description": "Apple Music 音乐人最新发布",
+        "categories": [
+          "multimedia"
+        ],
+        "features": {},
+        "radar": [
+          {
+            "source": [
+              "music.apple.com/cn/artist/:name/:id"
+            ],
+            "target": "/:name/:id"
+          }
+        ],
+        "location": "index.ts"
+      }
+    },
+    "name": "Apple Music",
+    "url": "music.apple.com",
+    "lang": "zh-CN"
+  },
   "appleinsider": {
     "routes": {
       "/:category?": {

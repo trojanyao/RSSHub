@@ -548,6 +548,9 @@
   "/apple/podcast/:id/:region?": [
     "Acring"
   ],
+  "/apple-music/:name/:id": [
+    "trojanyao"
+  ],
   "/appleinsider/:category?": [
     "nczitzk"
   ],
