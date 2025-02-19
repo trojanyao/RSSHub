@@ -32,6 +32,9 @@ export const route: Route = {
         const response = await ofetch(`https://music.apple.com/cn/artist/${name}/${id}`);
         const $ = load(response);
 
+        // 音乐人名字
+        const artistName = $('div.artist-header__name-container > h1').text();
+
         const items: DataItem[] = $('#scrollable-page > main > div > div.section.svelte-40si15.with-pinned-item > div.pinned-item > div.pinned-item-content')
             .toArray()
             .map((item) => {
@@ -70,7 +73,7 @@ export const route: Route = {
 
         return {
             // 源标题
-            title: `XXXX 最新发布`,
+            title: `${artistName} 最新发布`,
             // 源链接
             link: `https://music.apple.com/cn/artist/${name}/${id}`,
             description: 'Apple Music 音乐人 最新发布',
