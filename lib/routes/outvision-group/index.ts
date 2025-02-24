@@ -92,7 +92,7 @@ export const route: Route = {
             // 源标题
             title: MakerMap[String(key)],
             // 源链接
-            link: `https://madonna-av.com`,
+            link: `https://${url}`,
             description: MakerMap[String(key)] + ' 作品更新',
             logo: favicon,
             icon: favicon,
