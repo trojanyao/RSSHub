@@ -26,10 +26,6 @@ export const route: Route = {
 
         url = url.replaceAll('_', '/');
 
-        // Domain
-        const domainMatch = url.match(/^([^/]+)/);
-        const key = domainMatch ? domainMatch[1] : '';
-
         const response = await ofetch(`https://${url}`);
         const $ = load(response);
 
@@ -90,18 +86,14 @@ export const route: Route = {
 
         return {
             // 源标题
-            title: MakerMap[String(key)],
+            title: 'Outvision Group 集团厂商 作品更新',
             // 源链接
             link: `https://${url}`,
-            description: MakerMap[String(key)] + ' 作品更新',
+            description: 'Outvision Group 集团厂商 作品更新',
             logo: favicon,
             icon: favicon,
             language: 'ja',
             item: validItems,
         };
     },
-};
-
-const MakerMap = {
-    'madonna-av.com': 'Madonna',
 };
