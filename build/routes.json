@@ -67887,6 +67887,37 @@
     "url": "outage.report",
     "lang": "en"
   },
+  "outvision-group": {
+    "routes": {
+      "/:url": {
+        "path": "/:url",
+        "name": "Outvision Group 集团厂商 作品更新",
+        "url": "zh.wikipedia.org/wiki/CA集團",
+        "maintainers": [
+          "trojanyao"
+        ],
+        "example": "/outvision-group/madonna-av.com_works_list_release",
+        "parameters": {
+          "url": "对应作品页的 URL 路径"
+        },
+        "description": "Outvision Group 集团厂商 作品更新",
+        "categories": [
+          "multimedia"
+        ],
+        "features": {
+          "requireConfig": false,
+          "requirePuppeteer": false,
+          "antiCrawler": false,
+          "supportBT": false,
+          "supportPodcast": false,
+          "supportScihub": false
+        },
+        "location": "index.ts"
+      }
+    },
+    "name": "Outvision Group 集团厂商",
+    "url": "zh.wikipedia.org/wiki/CA集團"
+  },
   "p-articles": {
     "routes": {
       "/contributors/:author": {
