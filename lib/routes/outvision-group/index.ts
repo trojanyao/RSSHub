@@ -93,6 +93,7 @@ export const route: Route = {
             logo: favicon,
             icon: favicon,
             language: 'ja',
+            allowEmpty: true,
             item: validItems,
         };
     },
