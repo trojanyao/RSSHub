@@ -35,7 +35,7 @@ export const route: Route = {
         // 音乐人名字
         const artistName = $('div.artist-header__name-container > h1').text();
 
-        const items: DataItem[] = $('#scrollable-page > main > div > div.section.svelte-40si15.with-pinned-item > div.pinned-item > div.pinned-item-content')
+        const items: DataItem[] = $('#scrollable-page > main > div > div.section.with-pinned-item > div.pinned-item > div.pinned-item-content')
             .toArray()
             .map((item) => {
                 const foundItem = $(item);
