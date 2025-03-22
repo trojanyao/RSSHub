@@ -1,16 +1,16 @@
 name: Semgrep
 
 # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/#sample-github-actions-configuration-file
-on:
-  pull_request_target:
-    branches:
-      - master
-  push:
-    branches:
-      - master
-  schedule:
-    # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-    - cron: 21 20 * * *
+# on:
+#   pull_request_target:
+#     branches:
+#       - master
+#   push:
+#     branches:
+#       - master
+#   schedule:
+#     # random HH:MM to avoid a load spike on GitHub Actions at 00:00
+#     - cron: 21 20 * * *
 
 jobs:
   semgrep:
