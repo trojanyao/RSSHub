@@ -43,12 +43,12 @@ export const route: Route = {
                 const a = foundItem.find('a').first();
 
                 let imageUrl: string | undefined;
-                const srcset = foundItem.find('picture > source:nth-child(2)').attr('srcset');
+                const srcset = foundItem.find('picture > source:nth-child(1)').attr('srcset');
                 if (srcset) {
                     const entries = srcset.split(',');
                     for (const entry of entries) {
                         const [url, width] = entry.trim().split(' ');
-                        if (width === '316w') {
+                        if (width === '632w') {
                             imageUrl = url;
                             break;
                         }
@@ -62,12 +62,6 @@ export const route: Route = {
                     description: `<img src="${imageUrl}"/>
                     <p>${foundItem?.find('div > ul > li.latest-release__headline')?.text()}</p>
                     <p>${foundItem.find('li.latest-release__subtitle').text()}</p>`,
-                    image: imageUrl,
-                    banner: imageUrl,
-                    content: {
-                        html: `<img src="${imageUrl}" />`,
-                        text: '',
-                    },
                 };
             });
 
