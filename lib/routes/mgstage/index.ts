@@ -23,7 +23,7 @@ export const route: Route = {
     },
     radar: [
         {
-            source: ['mgstage.com/:search'],
+            source: ['mgstage.com/search/cSearch.php?:search'],
             target: '/:search',
         },
     ],
