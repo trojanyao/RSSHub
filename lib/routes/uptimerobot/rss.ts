@@ -1,6 +1,4 @@
 import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
 
 import Parser from 'rss-parser';
 import { art } from '@/utils/render';
@@ -99,7 +97,7 @@ async function handler(ctx) {
 
     const monitors = {};
 
-    const items = rss.items.reverse().map((item) => {
+    const items = rss.items.toReversed().map((item) => {
         const titleMatch = item.title.match(titleRegex);
         if (!titleMatch) {
             throw new InvalidParameterError('Unexpected title, please open an issue.');

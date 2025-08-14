@@ -1,6 +1,4 @@
 import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
 
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
@@ -66,7 +64,7 @@ export const handler = async (ctx) => {
             cache.tryGet(item.link, async () => {
                 const detailResponse = await ofetch(item.link);
 
-                const post = detailResponse.pageProps?.cmsData?.post ?? undefined;
+                const post = detailResponse.pageProps?.post ?? undefined;
 
                 if (!post) {
                     return item;
