@@ -13,6 +13,7 @@ on:
 
 jobs:
   check-env:
+    environment: production
     permissions:
       contents: none
     runs-on: ubuntu-latest
@@ -30,6 +31,7 @@ jobs:
     needs: check-env
     if: needs.check-env.outputs.check-docker == 'true'
     timeout-minutes: 60
+    environment: production
     permissions:
       packages: write
       id-token: write
@@ -53,43 +55,43 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Log in to the Container registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata (ordinary version)
-        id: meta-ordinary
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
-        with:
-          images: |
-            ${{ secrets.DOCKER_USERNAME }}/rsshub
-            ghcr.io/${{ github.repository }}
-          tags: |
-            type=raw,value=latest,enable=true
-            type=raw,value={{date 'YYYY-MM-DD'}},enable=true
-            type=sha,format=long,prefix=,enable=true
-          flavor: latest=false
+      # - name: Extract Docker metadata (ordinary version)
+      #   id: meta-ordinary
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: |
+      #       ${{ secrets.DOCKER_USERNAME }}/rsshub
+      #       ghcr.io/${{ github.repository }}
+      #     tags: |
+      #       type=raw,value=latest,enable=true
+      #       type=raw,value={{date 'YYYY-MM-DD'}},enable=true
+      #       type=sha,format=long,prefix=,enable=true
+      #     flavor: latest=false
 
-      - name: Build and push Docker image (ordinary version)
-        id: build-and-push
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta-ordinary.outputs.tags }}
-          labels: ${{ steps.meta-ordinary.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=docker-release
-          cache-to: type=gha,mode=max,scope=docker-release
+      # - name: Build and push Docker image (ordinary version)
+      #   id: build-and-push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ steps.meta-ordinary.outputs.tags }}
+      #     labels: ${{ steps.meta-ordinary.outputs.labels }}
+      #     platforms: linux/amd64,linux/arm/v7,linux/arm64
+      #     cache-from: type=gha,scope=docker-release
+      #     cache-to: type=gha,mode=max,scope=docker-release
 
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        env:
-          COSIGN_EXPERIMENTAL: 'true'
-        run: echo "${{ steps.meta-ordinary.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push.outputs.digest }}
+      # - name: Sign the published Docker image
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   env:
+      #     COSIGN_EXPERIMENTAL: 'true'
+      #   run: echo "${{ steps.meta-ordinary.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push.outputs.digest }}
 
       - name: Extract Docker metadata (Chromium-bundled version)
         id: meta-chromium-bundled
@@ -97,11 +99,11 @@ jobs:
         with:
           images: |
             ${{ secrets.DOCKER_USERNAME }}/rsshub
-            ghcr.io/${{ github.repository }}
+          #   ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=chromium-bundled,enable=true
-            type=raw,value=chromium-bundled-{{date 'YYYY-MM-DD'}},enable=true
-            type=sha,format=long,prefix=chromium-bundled-,enable=true
+          #   type=raw,value=chromium-bundled-{{date 'YYYY-MM-DD'}},enable=true
+          #   type=sha,format=long,prefix=chromium-bundled-,enable=true
           flavor: latest=false
 
       - name: Build and push Docker image (Chromium-bundled version)
@@ -129,6 +131,7 @@ jobs:
     needs: check-env
     if: needs.check-env.outputs.check-docker == 'true'
     timeout-minutes: 5
+    environment: production
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
