@@ -21,12 +21,6 @@ export const route: Route = {
         //     supportPodcast: false,
         //     supportScihub: false,
     },
-    radar: [
-        {
-            source: ['mgstage.com/search/cSearch.php?:search'],
-            target: '/:search',
-        },
-    ],
     handler: async (ctx) => {
         const { search } = ctx.req.param();
 
