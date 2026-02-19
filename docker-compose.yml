@@ -6,7 +6,7 @@ services:
         image: trojanyao/rsshub:chromium-bundled
         restart: always
         ports:
-            - "1200:1200"
+            - "80:1200"
         env_file:
             - ./.env
         environment:
@@ -31,7 +31,7 @@ services:
           - /var/run/docker.sock:/var/run/docker.sock
         environment:
           - WATCHTOWER_CLEANUP=true  # 自动删除旧镜像
-          - WATCHTOWER_POLL_INTERVAL=60  # 每 1 分钟检查一次更新
+          - WATCHTOWER_POLL_INTERVAL=600  # 每 10 分钟检查一次更新
           - WATCHTOWER_INCLUDE_STOPPED=true  # 也更新已停止的容器
 
     # browserless: # marked
