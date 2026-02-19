@@ -6,7 +6,7 @@ services:
         image: trojanyao/rsshub:chromium-bundled
         restart: always
         ports:
-            - "80:1200"
+            - "1200:1200"
         env_file:
             - ./.env
         environment:
