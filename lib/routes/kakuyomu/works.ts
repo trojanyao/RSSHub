@@ -1,10 +1,12 @@
-import type { Data, DataItem, Route } from '@/types';
 import { load } from 'cheerio';
 import type { Context } from 'hono';
-import ofetch from '@/utils/ofetch';
+
+import type { Data, DataItem, Route } from '@/types';
 import cache from '@/utils/cache';
-import type { NextDataEpisode } from './types';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
+
+import type { NextDataEpisode } from './types';
 
 export const route: Route = {
     name: '投稿',
@@ -49,7 +51,7 @@ async function handler(ctx: Context): Promise<Data> {
     const episodes = values.filter((value) => value.__typename === 'Episode') as NextDataEpisode[];
     const items = (await Promise.all(
         episodes
-            .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+            .toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
             .slice(0, limit)
             .map((item) => {
                 const episodeUrl = `https://kakuyomu.jp/works/${id}/episodes/${item.id}`;
