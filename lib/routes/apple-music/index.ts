@@ -1,6 +1,8 @@
-import { DataItem, Route } from '@/types';
-import ofetch from '@/utils/ofetch';
 import { load } from 'cheerio';
+import type { Context } from 'hono';
+
+import type { Data, DataItem, Route } from '@/types';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 
 export const route: Route = {
@@ -26,56 +28,59 @@ export const route: Route = {
             target: '/:name/:id',
         },
     ],
-    handler: async (ctx) => {
-        const { name, id } = ctx.req.param();
+    handler,
+};
 
-        const response = await ofetch(`https://music.apple.com/cn/artist/${name}/${id}`);
-        const $ = load(response);
+async function handler(ctx: Context): Promise<Data> {
+    const { name, id } = ctx.req.param();
 
-        // 音乐人名字
-        const artistName = $('div.artist-header__name-container > h1').text();
+    const response = await ofetch(`https://music.apple.com/cn/artist/${name}/${id}`);
+    const $ = load(response);
 
-        const items: DataItem[] = $('#scrollable-page > main > div > div.section.with-pinned-item > div.pinned-item > div.pinned-item-content')
-            .toArray()
-            .map((item) => {
-                const foundItem = $(item);
+    // 音乐人名字
+    const artistName = $('div.artist-header__name-container > h1').text();
 
-                const a = foundItem.find('a').first();
+    const items: DataItem[] = $('#scrollable-page > main > div > div.section.with-pinned-item > div.pinned-item > div.pinned-item-content')
+        .toArray()
+        .map((item) => {
+            const foundItem = $(item);
 
-                let imageUrl: string | undefined;
-                const srcset = foundItem.find('picture > source:nth-child(1)').attr('srcset');
-                if (srcset) {
-                    const entries = srcset.split(',');
-                    for (const entry of entries) {
-                        const [url, width] = entry.trim().split(' ');
-                        if (width === '632w') {
-                            imageUrl = url;
-                            break;
-                        }
+            const a = foundItem.find('a').first();
+
+            let imageUrl: string | undefined;
+            const srcset = foundItem.find('picture > source:nth-child(1)').attr('srcset');
+            if (srcset) {
+                const entries = srcset.split(',');
+                for (const entry of entries) {
+                    const [url, width] = entry.trim().split(' ');
+                    if (width === '632w') {
+                        imageUrl = url;
+                        break;
                     }
                 }
+            }
 
-                return {
-                    title: a.text(),
-                    link: a.attr('href'),
-                    pubDate: parseDate(foundItem?.find('div > ul > li.latest-release__headline')?.text()?.replace('年', '-')?.replace('月', '-')?.replace('日', '')),
-                    description: `<img src="${imageUrl}"/>
-                    <p>${foundItem?.find('div > ul > li.latest-release__headline')?.text()}</p>
-                    <p>${foundItem.find('li.latest-release__subtitle').text()}</p>`,
-                };
-            });
+            return {
+                title: a.text(),
+                link: a.attr('href'),
+                pubDate: parseDate(foundItem?.find('div > ul > li.latest-release__headline')?.text()?.replace('年', '-')?.replace('月', '-')?.replace('日', '')),
+                description: `<img src="${imageUrl}"/>
+                <p>${foundItem?.find('div > ul > li.latest-release__headline')?.text()}</p>
+                <p>${foundItem.find('li.latest-release__subtitle').text()}</p>`,
+            };
+        });
 
-        return {
-            // 源标题
-            title: `${artistName} 最新发布`,
-            // 源链接
-            link: `https://music.apple.com/cn/artist/${name}/${id}`,
-            description: 'Apple Music 音乐人 最新发布',
-            logo: 'https://music.apple.com/assets/favicon/favicon-180.png',
-            icon: 'https://music.apple.com/assets/favicon/favicon-180.png',
-            language: 'zh-CN',
-            // 源文章
-            item: items,
-        };
-    },
-};
+    return {
+        // 源标题
+        title: `${artistName} 最新发布`,
+        // 源链接
+        link: `https://music.apple.com/cn/artist/${name}/${id}`,
+        description: `Apple Music ${artistName} 最新发布`,
+        logo: 'https://music.apple.com/assets/favicon/favicon-180.png',
+        icon: 'https://music.apple.com/assets/favicon/favicon-180.png',
+        language: 'zh-CN',
+        // 源文章
+        item: items,
+        allowEmpty: true,
+    };
+}
