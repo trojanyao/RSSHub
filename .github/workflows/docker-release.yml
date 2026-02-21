@@ -135,7 +135,7 @@ jobs:
           port: 22
           script: |
             # 1. 进入 compose 文件所在目录
-            cd /root/my-app
+            cd /opt/rsshub
             
             # 2. 拉取最新镜像（会直接拉取你刚刚 push 的那个）
             docker compose pull
