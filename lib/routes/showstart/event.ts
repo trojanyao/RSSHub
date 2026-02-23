@@ -39,7 +39,7 @@ async function handler(ctx: Context): Promise<Data> {
     const tags = [cityName, showName].filter(Boolean).join(' - ');
     return {
         title: `${TITLE} - ${tags}`,
-        link: HOST,
+        link: `${HOST}/event/list?cityCode=${cityCode}${showStyle ? `&showStyle=${showStyle}` : ''}`,
         item: items,
         allowEmpty: true,
     };
